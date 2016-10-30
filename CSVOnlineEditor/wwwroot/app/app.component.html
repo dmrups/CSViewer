@@ -1,0 +1,42 @@
+﻿<h2 class="control">{{title}}</h2>
+<div class="control">
+    <span>Upload CSV -></span>
+    <input type="file" (change)="onChange($event)" />
+</div>
+<div class="control">{{error}}</div>
+<div class="control">
+    <table>
+        <thead>
+            <tr>
+                <th>Last name</th>
+                <th>First name</th>
+                <th>Middle name</th>
+                <th>Birth date</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of data">
+                <td>
+                    <field-editor [row]="row" [field]="'lastName'"></field-editor>
+                </td>
+                <td>
+                    <field-editor [row]="row" [field]="'firstName'"></field-editor>
+                </td>
+                <td>
+                    <field-editor [row]="row" [field]="'middleName'"></field-editor>
+                </td>
+                <td>
+                    <field-editor [row]="row" [field]="'birthDate'"></field-editor>
+                </td>
+                <td>
+                    <field-editor [row]="row" [field]="'email'"></field-editor>
+                </td>
+                <td>
+                    <field-editor [row]="row" [field]="'phone'"></field-editor>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
