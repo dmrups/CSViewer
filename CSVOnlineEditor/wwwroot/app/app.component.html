@@ -1,9 +1,21 @@
-﻿<h2 class="control">{{title}}</h2>
-<div class="control">
-    <span>Upload CSV -></span>
-    <input type="file" (change)="onChange($event)" />
+﻿<div style="margin:5px">
+    <h2 class="control">{{title}}</h2>
+    <div class="control">
+        <span>Upload CSV: </span>
+        <input type="file" (change)="fileInputChanged($event)" />
+    </div>
+    <div class="control">
+        <div style="display:inline-block">
+            <span>Download CSV: </span>
+            <button (click)="downloadCSV()">vvv</button>
+        </div>
+        <div style="display:inline-block; padding-left:10px">
+            <span>Cleanup database: </span>
+            <button (click)="cleanDB()">xxx</button>
+        </div>
+    </div>
+    <div class="control">{{error}}</div>
 </div>
-<div class="control">{{error}}</div>
 <div class="control">
     <table>
         <thead>

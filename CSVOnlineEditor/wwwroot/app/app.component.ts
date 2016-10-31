@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit }    from '@angular/core';
 import './rxjs-operators';
 
+
 import { Applicant }            from './applicant';
 import { ApplicantService}      from './app.service';
 
@@ -11,7 +12,7 @@ import { ApplicantService}      from './app.service';
 })
 
 export class AppComponent implements OnInit {
-    title = 'Applicants for mars invasion program';
+    title = 'Applicants for Mars Invasion Program';
     data = new Array<Applicant>();
     error: string;
 
@@ -19,16 +20,16 @@ export class AppComponent implements OnInit {
 
     ngOnInit() { this.getApplicants(); }
 
-    getApplicants() {
+    private getApplicants() {
         this.service.getApplicants()
             .subscribe(applicants => this.applyData(applicants));
     }
 
-    applyData(data: Applicant[]) {
+    private applyData(data: Applicant[]) {
         this.data = data;
     }
 
-    onChange(event) {
+    private fileInputChanged(event) {
         var files = event.srcElement.files;
 
         var texts = new Array<string>();
@@ -46,6 +47,14 @@ export class AppComponent implements OnInit {
                 }
             });
         }
+    }
+
+    private downloadCSV() {
+        this.service.getCSV().subscribe((csv) => this.service.downloadFile(csv));
+    }
+
+    private cleanDB() {
+        this.service.cleanDB().subscribe(() => this.getApplicants());
     }
 
     private showError(msg: string) {

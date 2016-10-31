@@ -11,13 +11,22 @@ namespace CSVOnlineEditor.Serializers
         {
             foreach(var row in collection.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None))
             {
-                yield return factory.CreateObject(row.Split('\t'));
+                var fields = row.Split('\t');
+
+                if(fields.Length < 4)
+                {
+                    continue;
+                }
+
+                yield return factory.CreateObject(fields);
             }
         }
         
-        public string Serialize(ICollection<ICSVSerializable> collection)
+        public string Serialize<T>(IEnumerable<T> collection, IAccessor<T> accessor)
         {
-            return string.Join("\r\n", collection.Select(item => string.Join("\t", item.GetObjectData())));
+            return string.Join("\r\n", 
+                collection.Select(item => string.Join("\t", 
+                    accessor.GetObjectData(item))));
         }
     }
 }

@@ -8,12 +8,18 @@ import { Observable }               from "rxjs/Observable";
 @Injectable()
 export class ApplicantService {
     private applicantsUrl = "api/applicants";
+    private csvUrl = "api/csv/applicants";
 
     constructor(private http: Http) { }
 
     getApplicants(): Observable<Applicant[]> {
         return this.http.get(this.applicantsUrl)
             .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    getCSV(): Observable<Response> {
+        return this.http.get(this.csvUrl)
             .catch(this.handleError);
     }
 
@@ -25,7 +31,12 @@ export class ApplicantService {
     }
     
     uploadFile(files: string[]): Observable<Response> {
-        return this.http.post(this.applicantsUrl, files, this.getDefaultRequestOptions())
+        return this.http.post(this.csvUrl, files, this.getDefaultRequestOptions())
+            .catch(this.handleError);
+    }
+
+    cleanDB(): Observable<Response> {
+        return this.http.delete(this.applicantsUrl)
             .catch(this.handleError);
     }
 
@@ -51,5 +62,8 @@ export class ApplicantService {
         return Observable.throw(errMsg);
     }
 
-
+    downloadFile(res: Response) {
+        var blob = new Blob([res.text()], { type: 'text/csv' });
+        saveAs(blob, 'applicants.csv');
+    }
 }
