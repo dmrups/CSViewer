@@ -1,51 +1,53 @@
-﻿using System;
+﻿using CSVOnlineEditor.Interfaces;
+using System;
 using System.Data.SqlTypes;
 using System.Text.RegularExpressions;
 
-namespace CSVOnlineEditor.Helpers
+namespace CSVOnlineEditor.Parsers
 {
-    public static class ParseHelper
+    public class ValueParser : IValueParser
     {
-        private static Regex notNumberRegex = new Regex(@"[^\d]");
-        private static Regex extraSpacesRegex = new Regex("[ ]{2,}");
+        private Regex notNumberRegex = new Regex(@"[^\d]");
+        private Regex extraSpacesRegex = new Regex("[ ]{2,}");
 
         /// <summary>
         /// Splits full name into last, first, middle
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tuple<string, string, string> ParseName(string name)
+        public Tuple<string, string, string> ParseName(string name)
         {
             var splitted = extraSpacesRegex.Replace(name, " ").Trim().Split(' ');
 
-            if (splitted.Length == 0)
+            if (splitted.Length == 1)
             {
-                return new Tuple<string, string, string>(null, null, null);
-            }
-            else if (splitted.Length == 1)
-            {
-                return new Tuple<string, string, string>(splitted[0], null, null);
+                return new Tuple<string, string, string>(splitted[0], "", "");
             }
             else if (splitted.Length == 2)
             {
-                return new Tuple<string, string, string>(splitted[0], splitted[1], null);
+                return new Tuple<string, string, string>(splitted[0], splitted[1], "");
             }
 
             return new Tuple<string, string, string>(splitted[0], splitted[1], splitted[2]);
         }
 
-        public static DateTime ParseDate(string date)
+        public DateTime ParseDate(string date)
         {
             DateTime result;
 
-            if (DateTime.TryParse(date, out result))
+            DateTime.TryParse(date, out result);
+
+            if (result < SqlDateTime.MinValue.Value)
             {
-                return result;
+                result = SqlDateTime.MinValue.Value;
             }
-            else
+
+            if (result > SqlDateTime.MaxValue.Value)
             {
-                return SqlDateTime.MinValue.Value;
+                result = SqlDateTime.MaxValue.Value;
             }
+
+            return result;
         }
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace CSVOnlineEditor.Helpers
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public static string ParseEmail(string email)
+        public string ParseEmail(string email)
         {
             return email.Replace(" ", "").Trim().ToLower();
         }
@@ -63,7 +65,7 @@ namespace CSVOnlineEditor.Helpers
         /// </summary>
         /// <param name="phone"></param>
         /// <returns></returns>
-        public static string ParsePhone(string phone)
+        public string ParsePhone(string phone)
         {
             return notNumberRegex.Replace(phone, "");
         }

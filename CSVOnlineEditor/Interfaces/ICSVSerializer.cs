@@ -4,7 +4,7 @@ namespace CSVOnlineEditor.Interfaces
 {
     public interface ICSVSerializer
     {
-        string Serialize(ICollection<ICSVSerializable> collection);
+        string Serialize<T>(IEnumerable<T> collection, IAccessor<T> accessor);
 
         IEnumerable<T> Deserialize<T>(string collection, IBuilder<T> factory);
     }

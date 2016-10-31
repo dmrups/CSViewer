@@ -8,7 +8,6 @@ namespace CSVOnlineEditor.Data.DBContexts
         public Storage(DbContextOptions<Storage> options)
             : base(options)
         {
-            Database.EnsureCreated();
         }
 
         public DbSet<Applicant> Applicants { get; set; }

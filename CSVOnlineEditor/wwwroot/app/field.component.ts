@@ -32,7 +32,6 @@ export class FieldEditorComponent {
     private oldValue: string;
 
     private cancelEdit(row: any) {
-        debugger;
         row[this.field] = this.oldValue; 
         this.oldValue = null;
     }

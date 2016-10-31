@@ -13,13 +13,11 @@ namespace CSVOnlineEditor.Controllers
     public class ApplicantsController : Controller
     {
         private readonly IApplicantRepository _repository;
-        private readonly ICSVSerializer _serializer;
         private readonly IBuilder<Applicant> _builder;
 
-        public ApplicantsController(IApplicantRepository repository, ICSVSerializer serializer, IBuilder<Applicant> builder)
+        public ApplicantsController(IApplicantRepository repository, IBuilder<Applicant> builder)
         {
             _repository = repository;
-            _serializer = serializer;
             _builder = builder;
         }
 
@@ -27,19 +25,6 @@ namespace CSVOnlineEditor.Controllers
         public object Get()
         {
             return _repository.Get();
-        }
-
-        [HttpPost]
-        public void Post([FromBody]string[] files)
-        {
-            var data = new List<Applicant>();
-
-            foreach (var file in files)
-            {
-                data.AddRange(_serializer.Deserialize(file, _builder));
-            }
-
-            _repository.Add(data);
         }
 
         [HttpPut("{id}")]
@@ -55,6 +40,12 @@ namespace CSVOnlineEditor.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpDelete]
+        public void DeleteAll()
+        {
+            _repository.Clean();
         }
     }
 }
