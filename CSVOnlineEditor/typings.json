@@ -1,7 +1,8 @@
 ﻿{
   "globalDependencies": {
     "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654",
-    "jquery": "registry:dt/jquery#1.10.0+20160417213236"
+    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
+    "filesaver": "github:DefinitelyTyped/DefinitelyTyped/FileSaver/FileSaver.d.ts#d21f1bd1fd079bbc18bc88ed71d2be7f5707e33a"
   }
 }
 
